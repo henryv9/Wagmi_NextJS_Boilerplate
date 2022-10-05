@@ -1,6 +1,7 @@
 import Header from "./header"
 import Footer from "./footer"
 import type { ReactChildren } from "react"
+import Navbar from "./navbar"
 
 interface Props {
   children: React.ReactNode
@@ -9,7 +10,7 @@ interface Props {
 export default function Layout({ children }: Props) {
   return (
     <>
-      <Header />
+      <Navbar />
       <main>{children}</main>
       <Footer />
     </>
