@@ -1,17 +1,19 @@
 import React from 'react';
-import discrodImage from '../../images/discord.png'
-import twitterImage from '../../images/twitter.png'
-import coverImage from '../../images/cover.png'
-import checkIcon from '../../images/icon-check.png'
-import profileImage from '../../images/profile-image.png'
+import checkIcon from '../../public/img/icon-check.png'
+import profileImage from '../../public/img/profile-image.png'
 import CarouselPersonal from './personal-carousel';
 import Image from 'next/image';
 function Personal (){
     return <div className="fit pt-10 bg-gray-800">
     <div className=" w-11/12 m-auto  max-w-6xl rounded-md  text-white">
         <div className="relative">
-           <Image src={coverImage} alt="" className="shadow-md rounded-md w-full h-36 max-h-48 object-cover " />
-           <div className="bg-yellow-500/80 absolute bottom-0 right-0 w-16 text-xs py-1 font-rolight font-bold">EDIT</div>
+            <img src="/cover.png" className="shadow-md rounded-md w-full h-36 max-h-48 object-cover "  />
+           {/* <Image      
+           objectFit="cover"
+           sizes="(max-width: 768px) 50px,
+              (max-width: 1200px) 110px,"
+              layout="responsive"  src={coverImage} alt="" className="shadow-md rounded-md w-full h-36 max-h-48 object-cover " /> */}
+           <div className="bg-yellow-500/80 absolute bottom-0 right-0 w-16 text-xs py-1 font-rolight font-bold text-center">EDIT</div>
            <div className="bg-gray-700/80 border-b-2 border-yellow-500 absolute top-8 right-0 text-left w-auto px-4 text-xs py-1 font-rolight font-bold">
             <p className="text-white tracking-widest font-robold text-[10px]">TRUST SCORE</p>
             <p className="text-white tracking-widest font-rolight text-[10px]">99.20%</p>
@@ -19,7 +21,7 @@ function Personal (){
         </div>
         <div className="avatar-wrapper w-fit m-auto">
             <div className="avatar-parent w-[100px] h-[100px] -mt-16">
-                <Image className="avatar w-[95px] h-[95px]" src={profileImage} alt="" />
+                <Image className="avatar" width="95" height="95" src={profileImage} alt="" />
                 
             </div> 
             <span className="button__badge bg-amber-500">
@@ -46,9 +48,9 @@ function Personal (){
                 <div className="w-full sm:max-w-[110px] flex flex-col justify-end content-end">
                     <p className="text-[10px] font-robold text-center sm:text-left mb-2">SOCIAL MEDIA</p>
                     <div className="grid grid-cols-3 gap-2">
-                        <Image className="bg-zinc-900 px-1.5 py-1.5 rounded-sm shadow-md w-6 h-6" src={twitterImage} alt="" />
-                        <Image className="bg-zinc-900 px-1.5 py-1.5 rounded-sm shadow-md w-6 h-6" src={discrodImage} alt="" />
-                        <Image className="bg-zinc-900 px-1.5 py-1.5 rounded-sm shadow-md w-6 h-6" src={twitterImage} alt="" />
+                        <img className="bg-zinc-900 px-1.5 py-1.5 rounded-md shadow-2xl w-6 h-6" src="/img/twitter.png" alt="" />
+                        <img className="bg-zinc-900 px-1.5 py-1.5 rounded-md shadow-2xl w-6 h-6" src="/img/discord.png" alt="" />
+                        <img className="bg-zinc-900 px-1.5 py-1.5 rounded-md shadow-2xl w-6 h-6" src="/img/discord.png" alt="" />
                     </div>
                 </div>            
             </div>       

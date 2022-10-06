@@ -6,9 +6,9 @@ import { SiweMessage } from "siwe"
 import { useAccount, useNetwork, useSignMessage } from "wagmi"
 import { useRouter } from 'next/router'
 import Image from 'next/image'
-import closeIcon from '../../images/icon-close.svg'
-import metamaskIcon from '../../images/meta-mask.png'
-import verifyIcon from '../../images/icon-verify.png'
+import closeIcon from '../../public/img/icon-close.svg'
+import metamaskIcon from '../../public/img/meta-mask.png'
+import verifyIcon from '../../public/img/icon-verify.png'
 
 const Modal = ({ show, onClick=()=>{}  }: { show: boolean; onClick?:() => void }) => {
     const { signMessageAsync } = useSignMessage()
@@ -101,7 +101,9 @@ const Modal = ({ show, onClick=()=>{}  }: { show: boolean; onClick?:() => void }
                         <p className="ml-2">Metamask</p>
                         </button>
                     ) : (
-                        <ConnectButton />
+                        <div className="shadow-2xl bg-sky-600 rounded-md text-white w-fit px-5 py-3 m-auto">
+                          <ConnectButton />
+                          </div>
                     )}                    
                 </div>
                 <p className="text-xs px-16 text-white mt-6">By connecting your wallet and using inWeb3, 

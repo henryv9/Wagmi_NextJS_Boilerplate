@@ -1,11 +1,11 @@
 import Layout from "../components/layout"
 import Image from "next/image"
 
-import discrodImage from '../images/discord.png'
-import twitterImage from '../images/twitter.png'
-import coverImage from '../images/cover.png'
-import checkIcon from '../images/icon-check.png'
-import profileImage from '../images/profile-image.png'
+import discrodImage from '../public/img/discord.png'
+import twitterImage from '../public/img/twitter.png'
+import coverImage from '../public/img/cover.png'
+import checkIcon from '../public/img/icon-check.png'
+import profileImage from '../public/img/profile-image.png'
 import { getSession } from "next-auth/react"
 
 function IndexPage() {
@@ -22,22 +22,14 @@ function IndexPage() {
                   layout="responsive"
                   src={coverImage}
                 />   
-                <div className="avatar-wrapper w-fit m-auto">
-                    <div className="avatar-parent">
-                        <Image
-                            className="avatar"
-                            src={profileImage}
-                          />
-                      
-                    </div> 
-                    <span className="button__badge bg-amber-500">
-                        <Image
-                            src={checkIcon}
-                            width="12"
-                            height="12"
-                          />
-                    </span>
-                </div>
+        <div className="avatar-wrapper w-fit m-auto">
+        <div className="avatar-parent w-[100px] h-[100px] -mt-16">
+                <Image width="95px" height="95px" className="avatar" src={profileImage} alt="" />
+            </div> 
+            <span className="button__badge bg-amber-500">
+                <img src="/img/icon-check.png" className="w-4 h-4 p-1" alt="check" />
+            </span>
+        </div>
 
                 <div className="px-9 mt-5">
                     <p className="font-bold text-md">Renkon NFT</p>
