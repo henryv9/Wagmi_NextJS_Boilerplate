@@ -4,7 +4,6 @@ import Image from "next/image"
 import discrodImage from '../public/img/discord.png'
 import twitterImage from '../public/img/twitter.png'
 import coverImage from '../public/img/cover.png'
-import checkIcon from '../public/img/icon-check.png'
 import profileImage from '../public/img/profile-image.png'
 import { getSession } from "next-auth/react"
 
@@ -74,7 +73,6 @@ IndexPage.Layout = Layout
 
 export async function getServerSideProps(context: any) {
   const session = await getSession(context)
-
   if (session) {
     return {
       redirect: {

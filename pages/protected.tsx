@@ -3,6 +3,7 @@ import { useSession,getSession } from "next-auth/react"
 import Layout from "../components/layout"
 import AccessDenied from "../components/access-denied"
 import BusinessOne from "../components/business-one"
+import { useAccount, useNetwork, useSignMessage,useConnect } from "wagmi"
 
 export default function ProtectedPage() {
   const { data: session, status } = useSession()

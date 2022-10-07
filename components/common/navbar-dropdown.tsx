@@ -1,11 +1,18 @@
 import { Menu, Transition } from '@headlessui/react'
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import Image from 'next/image'
+import { useDisconnect } from 'wagmi'
 import arrowDownIcon from '../../public/img/icon-arrow-down.png'
 
 export default function Dropdown() {
   const { data: session, status } = useSession()
+  const { disconnect } = useDisconnect()
+
+  const handleLogout = () => {
+    disconnect()
+    signOut()
+  }
   return (
     <div className="basis-1/3 inline-block" >
       <Menu as="div" className="text-left">
@@ -71,7 +78,7 @@ export default function Dropdown() {
                     href={`/api/auth/signout`}
                     onClick={(e) => {
                         e.preventDefault()
-                        signOut()
+                        handleLogout()
                       }}
                     className={`${
                       active ? 'bg-violet-500 text-white' : 'text-gray-900'

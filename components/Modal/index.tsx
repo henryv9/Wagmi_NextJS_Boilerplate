@@ -1,9 +1,8 @@
 import {useEffect,Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { getCsrfToken, signIn, useSession } from "next-auth/react"
-import { ConnectButton } from "@rainbow-me/rainbowkit"
 import { SiweMessage } from "siwe"
-import { useAccount, useNetwork, useSignMessage } from "wagmi"
+import { useAccount, useNetwork, useSignMessage,useConnect } from "wagmi"
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import closeIcon from '../../public/img/icon-close.svg'
@@ -11,37 +10,54 @@ import metamaskIcon from '../../public/img/meta-mask.png'
 import verifyIcon from '../../public/img/icon-verify.png'
 
 const Modal = ({ show, onClick=()=>{}  }: { show: boolean; onClick?:() => void }) => {
-    const { signMessageAsync } = useSignMessage()
+    const { signMessageAsync } = useSignMessage({
+      onSuccess(){
+        setConnecting(false)
+      }
+    })
     const router = useRouter()
     const { chain } = useNetwork()
-    const { address, isConnected } = useAccount()
+    const { address, isConnected, connector } = useAccount()
     const { data: session, status } = useSession()
-  
+    const [ connecting, setConnecting] = useState(false)
+    const { connectors, connect , error, isLoading, pendingConnector} = useConnect({
+      onSuccess:async () => {
+        setConnecting(true)
+      },
+    })
+
+    const uniqueAddresses = Array.from(new Set(connectors.map(connector => connector.name)))
+    .map(name => {
+      return connectors.find(filterConnector => filterConnector.name === name)
+    }) 
+
     const handleLogin = async () => {
-      try {
-        loadingStarter()
-        const callbackUrl = "/protected"
-        const message = new SiweMessage({
-          domain: window.location.host,
-          address: address,
-          statement: "Sign in with Ethereum to the app.",
-          uri: window.location.origin,
-          version: "1",
-          chainId: chain?.id,
-          nonce: await getCsrfToken(),
-        })
-        const signature = await signMessageAsync({
-          message: message.prepareMessage(),
-        })
-        signIn("credentials", {
-          message: JSON.stringify(message),
-          redirect: false,
-          signature,
-          callbackUrl,
-        })
-      } catch (error) {
-        window.alert(error)
-        errorSignIn()
+      if(connector){
+        try {
+          loadingStarter()
+          const callbackUrl = "/protected"
+          const message = new SiweMessage({
+            domain: window.location.host,
+            address: address,
+            statement: "Sign in with Ethereum to the app.",
+            uri: window.location.origin,
+            version: "1",
+            chainId: chain?.id,
+            nonce: await getCsrfToken(),
+          })
+          const signature = await signMessageAsync({
+            message: message.prepareMessage(),
+          })
+          signIn("credentials", {
+            message: JSON.stringify(message),
+            redirect: false,
+            signature,
+            callbackUrl,
+          })
+        } catch (error) {
+          window.alert(error)
+          errorSignIn()
+        }
       }
     }   
    
@@ -76,10 +92,16 @@ const Modal = ({ show, onClick=()=>{}  }: { show: boolean; onClick?:() => void }
         setLoading(true)
       }
       useEffect(() => {
-        if(session && isConnected) {
-            router.replace("/protected")
+        if(address && isConnected && connector) {
+          if(session){
+              router.replace("/protected")
+          }else{
+            if(connecting){
+              handleLogin()
+            }
+          }
         }
-      },[session,isConnected]);
+      },[session,isConnected,connecting]);
     
       if(!loading){
         if(dialogStatus === 0){
@@ -90,21 +112,31 @@ const Modal = ({ show, onClick=()=>{}  }: { show: boolean; onClick?:() => void }
                     <p>Connect your Wallet to continue</p>
                 </Dialog.Title>
                 <div className="mt-7">
-                    {address ? 
+                {isConnected && address && connector ? 
                     session ? "" :
                     (
                         <button type="button" onClick={(e) => {
                             e.preventDefault()
+                            setConnecting(true)
                             handleLogin()
                         }}  className="shadow-md justify-start w-1/2 text-white bg-sky-700/75 hover:bg-sky-700 text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 rounded-md">
-                        <Image className="mr-2 -ml-1 w-5 h-5" src={metamaskIcon} alt="" />
-                        <p className="ml-2">Metamask</p>
+                        <p className="ml-2">Sign In</p>
                         </button>
-                    ) : (
-                        <div className="shadow-2xl bg-sky-600 rounded-md text-white w-fit px-5 py-3 m-auto">
-                          <ConnectButton />
-                          </div>
-                    )}                    
+                    ) :  uniqueAddresses.map((connector) => (
+                      <button
+                      className="shadow-md justify-start mt-2 w-1/2 text-white bg-sky-700/75 hover:bg-sky-700 text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 rounded-md"
+                        disabled={!connector?.ready}
+                        key={connector?.id}
+                        onClick={() => connect({ connector })}
+                      >
+                        {connector?.name == 'MetaMask' ? <Image className="mr-2 -ml-1" width="20" height="20" src={metamaskIcon} alt="" /> :""}
+                        <p className="ml-3">{connector?.name}</p>
+                        {!connector?.ready && ' (unsupported)'}
+                        {isLoading &&
+                          connector?.id === pendingConnector?.id &&
+                          ' (connecting)'}
+                      </button>
+                    ))}         
                 </div>
                 <p className="text-xs px-16 text-white mt-6">By connecting your wallet and using inWeb3, 
                 you agree to our <strong>Terms of Service</strong> and <strong>Privacy Policy</strong>.</p>
