@@ -7,11 +7,14 @@ import arrowDownIcon from '../../public/img/icon-arrow-down.png'
 
 export default function Dropdown() {
   const { data: session, status } = useSession()
-  const { disconnect } = useDisconnect()
+  const { disconnect } = useDisconnect({
+    onSuccess(){
+      signOut()
+    }
+  })
 
   const handleLogout = () => {
     disconnect()
-    signOut()
   }
   return (
     <div className="basis-1/3 inline-block" >

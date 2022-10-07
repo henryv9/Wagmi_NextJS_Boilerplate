@@ -18,9 +18,9 @@ const Modal = ({ show, onClick=()=>{}  }: { show: boolean; onClick?:() => void }
     const router = useRouter()
     const { chain } = useNetwork()
     const { address, isConnected, connector } = useAccount()
-    const { data: session, status } = useSession()
+    const { data: session} = useSession()
     const [ connecting, setConnecting] = useState(false)
-    const { connectors, connect , error, isLoading, pendingConnector} = useConnect({
+    const { connectors, connect , isLoading, pendingConnector} = useConnect({
       onSuccess:async () => {
         setConnecting(true)
       },
@@ -181,9 +181,6 @@ const Modal = ({ show, onClick=()=>{}  }: { show: boolean; onClick?:() => void }
                         </div>
                     </div> 
             )
-            /* SASAS */
-    
-            
         } else if(dialogStatus === 2) {
             bodyPart = (
                 <div className="mt-3 text-center sm:mt-0 sm:ml-4">
