@@ -31,7 +31,7 @@ export default function Navbar() {
                 <div className="flex items-center gap-3 text-center xs:mb-0">
                   <a className="p-2 xs:px-4 mb-2 sm:mb-1 md:mb-0 font-bold text-xs mx-1 text-white" >HOME</a>
                   <a className="p-2 xs:px-4 mb-2 sm:mb-1 md:mb-0 font-bold text-xs mx-1 text-white" >EXPLORE</a>
-                  { isConnected && session ? <Dropdown/> : <button type="button" 
+                  { session ? <Dropdown/> : <button type="button" 
                       onClick={() => setIsOpen(true)}
                       className="text-white hover:text-white border
                       border-white hover:bg-zinc-700 font-medium 
