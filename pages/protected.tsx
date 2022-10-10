@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react"
-import { useSession } from "next-auth/react"
+import { useSession,getSession } from "next-auth/react"
 import Layout from "../components/layout"
 import AccessDenied from "../components/access-denied"
+import BusinessOne from "../components/business-one"
+import { useAccount, useNetwork, useSignMessage,useConnect } from "wagmi"
 
 export default function ProtectedPage() {
   const { data: session, status } = useSession()
@@ -35,10 +37,26 @@ export default function ProtectedPage() {
   // If session exists, display content
   return (
     <Layout>
-      <h1>Protected Page</h1>
+      <BusinessOne/>
+      {/* <h1>Protected Page</h1>
       <p>
         <strong>{content ?? "\u00a0"}</strong>
-      </p>
+      </p> */}
     </Layout>
   )
+}
+
+export async function getServerSideProps(context: any) {
+  const session = await getSession(context)
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+  return {
+    props: { session }
+  }
 }
