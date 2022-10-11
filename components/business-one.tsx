@@ -4,6 +4,26 @@ import nftImageTwo from '../public/img/nft-dummy2.png'
 import nftImageThree from '../public/img/nft-dummy3.png'
 import eventDummy from '../public/img/event-dummy1.png'
 import Image from 'next/image'
+import axios from 'axios'
+
+const publicKey = "0x06aFc9b8Eb7E0Cd73c269eeB47E13c149ddc01f4";
+const registerUser = async () => {
+    const res = await axios
+      .post(
+        "/api/register",
+        { publicKey },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .catch((error) => {
+        console.log(error);
+      });
+    console.log(res);
+};
 
 export default function BusinessOne() {
   return (
@@ -51,7 +71,13 @@ export default function BusinessOne() {
                 </div>   
                 <div className="px-9 mt-5 bg-gray-700 pt-1 rounded-md">
                     <div className="flex flex-col items-center mb-10 mt-3">
-                        <button type="button" className="shadow-md justify-center w-full max-w-xs  mb-4 text-white bg-zinc-800 hover:bg-sky-700 px-5 py-3.5 text-center font-bold text-xs inline-flex items-center mr-2 rounded-md">
+                        <button 
+                            type="button" 
+                            className="shadow-md justify-center w-full max-w-xs  mb-4 text-white bg-zinc-800 hover:bg-sky-700 px-5 py-3.5 text-center font-bold text-xs inline-flex items-center mr-2 rounded-md"
+                            onClick={() => {
+                                registerUser()
+                            }}
+                        >
                             Setup Collection
                         </button>                        
                     </div>
